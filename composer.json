@@ -1,0 +1,58 @@
+{
+    "name": "driesvints/laravel-lemon-squeezy",
+    "description": "A package to easily integrate your Laravel application with Lemon Squeezy's billing services. ",
+    "keywords": ["laravel", "lemon squeezy", "billing"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/driesvints/laravel-lemon-squeezy/issues",
+        "source": "https://github.com/driesvints/laravel-lemon-squeezy"
+    },
+    "authors": [
+        {
+            "name": "Dries Vints",
+            "homepage": "https://driesvints.com"
+        }
+    ],
+    "require": {
+        "php": "~8.1.0|~8.2.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "laravel/framework": "^9.0",
+        "moneyphp/money": "^4.0",
+        "nesbot/carbon": "^2.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.0",
+        "pestphp/pest": "^1.0"
+    },
+    "suggest": {
+        "ext-intl": "Allows for more locales besides the default \"en\" when formatting money values."
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelLemonSqueezy\\": "src/",
+            "LaravelLemonSqueezy\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "LaravelLemonSqueezy\\LemonSqueezyServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "prefer-stable": true
+}
