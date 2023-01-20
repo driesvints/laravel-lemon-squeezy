@@ -16,3 +16,5 @@
 A package to easily integrate your Laravel application with [Lemon Squeezy](https://www.lemonsqueezy.com/)'s billing services. 
 
 This package drew inspiration from [Cashier](https://github.com/laravel/cashier-stripe) which was created by [Taylor Otwell](https://twitter.com/taylorotwell).
+
+> This package is a work in progress...
