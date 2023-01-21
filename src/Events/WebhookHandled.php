@@ -10,17 +10,8 @@ class WebhookHandled
     use Dispatchable;
     use SerializesModels;
 
-    /**
-     * @var array
-     */
-    public $payload;
+    public array $payload;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param  array  $payload
-     * @return void
-     */
     public function __construct(array $payload)
     {
         $this->payload = $payload;
