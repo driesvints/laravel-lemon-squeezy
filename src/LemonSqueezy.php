@@ -15,6 +15,11 @@ class LemonSqueezy
     public static bool $runsMigrations = true;
 
     /**
+     * Indicates if routes will be registered.
+     */
+    public static bool $registersRoutes = true;
+
+    /**
      * Perform a Lemon Squeezy API call.
      *
      * @throws \Exception
@@ -42,10 +47,16 @@ class LemonSqueezy
     /**
      * Configure to not register any migrations.
      */
-    public static function ignoreMigrations(): static
+    public static function ignoreMigrations(): void
     {
         static::$runsMigrations = false;
+    }
 
-        return new static;
+    /**
+     * Configure to not register its routes.
+     */
+    public static function ignoreRoutes(): void
+    {
+        static::$registersRoutes = false;
     }
 }

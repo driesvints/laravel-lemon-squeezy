@@ -2,6 +2,7 @@
 
 namespace LaravelLemonSqueezy;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class LemonSqueezyServiceProvider extends ServiceProvider
@@ -15,8 +16,21 @@ class LemonSqueezyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->bootRoutes();
         $this->bootMigrations();
         $this->bootPublishing();
+    }
+
+    protected function bootRoutes(): void
+    {
+        if (LemonSqueezy::$registersRoutes) {
+            Route::group([
+                'prefix' => config('lemon-squeezy.path'),
+                'as' => 'lemon-squeezy.',
+            ], function () {
+                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+            });
+        }
     }
 
     protected function bootMigrations(): void
