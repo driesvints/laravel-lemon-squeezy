@@ -8,7 +8,7 @@ class CreateCustomersTable extends Migration
 {
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('lemon_squeezy_customers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('billable_id');
             $table->string('billable_type');

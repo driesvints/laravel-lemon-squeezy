@@ -11,6 +11,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Customer extends Model
 {
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'lemon_squeezy_customers';
+
+    /**
      * The attributes that are not mass assignable.
      *
      * @var array

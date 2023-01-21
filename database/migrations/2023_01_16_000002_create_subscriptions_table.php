@@ -8,7 +8,7 @@ class CreateSubscriptionsTable extends Migration
 {
     public function up(): void
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
+        Schema::create('lemon_squeezy_subscriptions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('billable_id');
             $table->string('billable_type');
