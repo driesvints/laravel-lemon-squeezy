@@ -32,7 +32,8 @@ class LemonSqueezy
         }
 
         /** @var \Illuminate\Http\Client\Response $response */
-        $response = Http::withHeaders(['Authorization' => "Bearer {$apiKey}"])
+        $response = Http::withToken($apiKey)
+            ->withUserAgent('Laravel Lemon Squeezy')
             ->accept('application/vnd.api+json')
             ->contentType('application/vnd.api+json')
             ->$method("https://api.lemonsqueezy.com/v1/{$uri}", $payload);
