@@ -9,6 +9,8 @@ use LaravelLemonSqueezy\Exceptions\LemonSqueezyException;
 
 class LemonSqueezy
 {
+    const VERSION = '0.1.0-dev';
+
     /**
      * Indicates if migrations will be run.
      */
@@ -33,7 +35,7 @@ class LemonSqueezy
 
         /** @var \Illuminate\Http\Client\Response $response */
         $response = Http::withToken($apiKey)
-            ->withUserAgent('Laravel Lemon Squeezy')
+            ->withUserAgent('LaravelLemonSqueezy/'.static::VERSION)
             ->accept('application/vnd.api+json')
             ->contentType('application/vnd.api+json')
             ->$method("https://api.lemonsqueezy.com/v1/{$uri}", $payload);
