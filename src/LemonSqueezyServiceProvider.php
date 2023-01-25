@@ -4,6 +4,7 @@ namespace LaravelLemonSqueezy;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use LaravelLemonSqueezy\Http\Controllers\WebhookController;
 
 class LemonSqueezyServiceProvider extends ServiceProvider
 {
@@ -28,7 +29,7 @@ class LemonSqueezyServiceProvider extends ServiceProvider
                 'prefix' => config('lemon-squeezy.path'),
                 'as' => 'lemon-squeezy.',
             ], function () {
-                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+                Route::post('webhook', WebhookController::class)->name('webhook');
             });
         }
     }
