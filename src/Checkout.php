@@ -18,6 +18,10 @@ class Checkout implements Responsable
 
     private bool $code = true;
 
+    private array $fields = [];
+
+    private array $data = [];
+
     public function __construct(string $variant)
     {
         $this->variant = $variant;
@@ -56,16 +60,39 @@ class Checkout implements Responsable
         return $this;
     }
 
+    public function withPrefilledFields(array $fields): static
+    {
+        $this->fields = $fields;
+
+        return $this;
+    }
+
+    public function withCustomData(array $data): static
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
     public function url(): string
     {
         $store = config('lemon-squeezy.store');
 
-        $toggles = collect(['logo', 'media', 'description', 'code'])
+        $params = collect(['logo', 'media', 'description', 'code'])
             ->filter(fn ($toggle) => ! $this->{$toggle})
-            ->map(fn ($toggle) => $toggle.'=0')
-            ->implode('&');
+            ->mapWithKeys(fn ($toggle) => [$toggle => 0]);
 
-        return "https://{$store}.lemonsqueezy.com/checkout/buy/{$this->variant}".($toggles ? '?'.$toggles : '');
+        if ($this->fields) {
+            $params = $params->merge($this->fields);
+        }
+
+        if ($this->data) {
+            $params['custom'] = $this->data;
+        }
+
+        $params = $params->isNotEmpty() ? '?' . http_build_query($params->all()) : '';
+
+        return "https://{$store}.lemonsqueezy.com/checkout/buy/{$this->variant}".$params;
     }
 
     public function redirect(): RedirectResponse
