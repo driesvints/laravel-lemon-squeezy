@@ -18,7 +18,7 @@ class VerifyWebhookSignature
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($this->isInvalidSignature($request->getContent(), $request->header('HTTP_X_SIGNATURE'))) {
+        if ($this->isInvalidSignature($request->getContent(), $request->header('x-signature'))) {
             throw new AccessDeniedHttpException('Invalid webhook signature.');
         }
 
