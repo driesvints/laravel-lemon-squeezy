@@ -62,16 +62,49 @@ class Checkout implements Responsable
 
     public function withPrefilledFields(array $fields): static
     {
-        $this->fields = $fields;
+        $this->fields = $this->cleanQueryParameters(
+            array_replace_recursive($this->fields, $fields)
+        );
 
         return $this;
     }
 
     public function withCustomData(array $data): static
     {
-        $this->data = $data;
+        // These are reserved keys.
+        if (isset($this->data['billable_id'])) {
+            unset($data['billable_id']);
+        }
+
+        if (isset($this->data['billable_type'])) {
+            unset($data['billable_type']);
+        }
+
+        $this->data = $this->cleanQueryParameters(
+            array_replace_recursive($this->data, $data)
+        );
 
         return $this;
+    }
+
+    private function cleanQueryParameters(array $params): array
+    {
+        return collect($params)
+            ->map(function ($value) {
+                if (is_array($value)) {
+                    return collect($value)
+                        ->map(fn ($value) => is_string($value) ? trim($value) : $value)
+                        ->all();
+                }
+
+                return is_string($value) ? trim($value) : $value;
+            })->filter(function ($value) {
+                if (is_array($value)) {
+                    return collect($value)->filter()->all();
+                }
+
+                return ! empty($value);
+            })->all();
     }
 
     public function url(): string

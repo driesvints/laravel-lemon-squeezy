@@ -24,11 +24,19 @@ trait ManagesCustomer
     }
 
     /**
+     * Get the billable model's name to associate with Lemon Squeezy.
+     */
+    public function lemonSqueezyName(): ?string
+    {
+        return $this->name ?? null;
+    }
+
+    /**
      * Get the billable model's email address to associate with Lemon Squeezy.
      */
     public function lemonSqueezyEmail(): ?string
     {
-        return $this->email;
+        return $this->email ?? null;
     }
 
     /**
@@ -38,6 +46,30 @@ trait ManagesCustomer
      */
     public function lemonSqueezyCountry(): ?string
     {
-        // return 'US';
+        return $this->country ?? null; // 'US'
+    }
+
+    /**
+     * Get the billable model's state to associate with Lemon Squeezy.
+     */
+    public function lemonSqueezyState(): ?string
+    {
+        return $this->state ?? null; // 'NY'
+    }
+
+    /**
+     * Get the billable model's zip code to associate with Lemon Squeezy.
+     */
+    public function lemonSqueezyZip(): ?string
+    {
+        return $this->zip ?? null; // '10038'
+    }
+
+    /**
+     * Get the billable model's tax number to associate with Lemon Squeezy.
+     */
+    public function lemonSqueezyTaxNumber(): ?string
+    {
+        return $this->tax_number ?? null; // 'GB123456789'
     }
 }
