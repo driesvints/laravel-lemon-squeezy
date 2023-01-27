@@ -90,7 +90,7 @@ class Checkout implements Responsable
             $params['custom'] = $this->data;
         }
 
-        $params = $params->isNotEmpty() ? '?' . http_build_query($params->all()) : '';
+        $params = $params->isNotEmpty() ? '?'.http_build_query($params->all()) : '';
 
         return "https://{$store}.lemonsqueezy.com/checkout/buy/{$this->variant}".$params;
     }
