@@ -61,8 +61,8 @@ class Checkout implements Responsable
         $store = config('lemon-squeezy.store');
 
         $toggles = collect(['logo', 'media', 'description', 'code'])
-            ->filter(fn($toggle) => ! $this->{$toggle})
-            ->map(fn($toggle) => $toggle.'=0')
+            ->filter(fn ($toggle) => ! $this->{$toggle})
+            ->map(fn ($toggle) => $toggle.'=0')
             ->implode('&');
 
         return "https://{$store}.lemonsqueezy.com/checkout/buy/{$this->variant}".($toggles ? '?'.$toggles : '');

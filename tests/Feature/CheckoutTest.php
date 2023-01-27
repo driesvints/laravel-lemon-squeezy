@@ -4,7 +4,7 @@ use Illuminate\Http\RedirectResponse;
 use LaravelLemonSqueezy\Checkout;
 use Tests\Fixtures\User;
 
-beforeEach(fn() => config()->set('lemon-squeezy.store', 'lemon'));
+beforeEach(fn () => config()->set('lemon-squeezy.store', 'lemon'));
 
 it('can initiate a new checkout', function () {
     $checkout = (new User)->checkout('variant_123');

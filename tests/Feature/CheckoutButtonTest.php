@@ -11,7 +11,7 @@ it('can render a button', function () {
         ['href' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']
     );
 
-    $expect = <<<HTML
+    $expect = <<<'HTML'
         <a
             href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?embed=1"
             class="lemonsqueezy-button"
@@ -29,7 +29,7 @@ it('can render an overlay with a dark background', function () {
         ['href' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123']
     );
 
-    $expect = <<<HTML
+    $expect = <<<'HTML'
         <a
             href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?embed=1&dark=1"
             class="lemonsqueezy-button"
@@ -47,7 +47,7 @@ it('can render a button with disabled toggles', function () {
         ['href' => 'https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&media=0']
     );
 
-    $expect = <<<HTML
+    $expect = <<<'HTML'
         <a
             href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&media=0&embed=1"
             class="lemonsqueezy-button"
@@ -67,7 +67,7 @@ it('can render a checkout instance', function () {
         ['href' => (new User)->checkout('variant_123')->withoutLogo()]
     );
 
-    $expect = <<<HTML
+    $expect = <<<'HTML'
         <a
             href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&embed=1"
             class="lemonsqueezy-button"
