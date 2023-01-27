@@ -41,4 +41,17 @@ return [
 
     'path' => env('LEMON_SQUEEZY_PATH', 'lemon-squeezy'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Lemon Squeezy Store
+    |--------------------------------------------------------------------------
+    |
+    | This is the URL to your Lemon Squeezy store. You can find your store
+    | URL in the Lemon Squeezy dashboard. The entered value should be the
+    | subdomain of your store URL right before the .lemonsqueezy.com part.
+    |
+    */
+
+    'store' => env('LEMON_SQUEEZY_STORE'),
+
 ];

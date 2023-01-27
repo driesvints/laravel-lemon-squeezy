@@ -2,6 +2,7 @@
 
 namespace LaravelLemonSqueezy;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use LaravelLemonSqueezy\Http\Controllers\WebhookController;
@@ -18,8 +19,11 @@ class LemonSqueezyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->bootRoutes();
+        $this->bootResources();
         $this->bootMigrations();
         $this->bootPublishing();
+        $this->bootDirectives();
+        $this->bootComponents();
     }
 
     protected function bootRoutes(): void
@@ -32,6 +36,11 @@ class LemonSqueezyServiceProvider extends ServiceProvider
                 Route::post('webhook', WebhookController::class)->name('webhook');
             });
         }
+    }
+
+    protected function bootResources(): void
+    {
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'lemon-squeezy');
     }
 
     protected function bootMigrations(): void
@@ -51,6 +60,22 @@ class LemonSqueezyServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
             ], 'lemon-squeezy-migrations');
+
+            $this->publishes([
+                __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/lemon-squeezy'),
+            ], 'lemon-squeezy-views');
         }
+    }
+
+    protected function bootDirectives(): void
+    {
+        Blade::directive('lemonJS', function () {
+            return "<?php echo view('lemon-squeezy::js'); ?>";
+        });
+    }
+
+    protected function bootComponents(): void
+    {
+        Blade::component('lemon-squeezy::components.button', 'lemon-button');
     }
 }
