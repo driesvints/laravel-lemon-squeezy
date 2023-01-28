@@ -24,7 +24,8 @@ class Checkout implements Responsable
     public function __construct(
         private string $store,
         private string $variant
-    ) {}
+    ) {
+    }
 
     public static function make(string $store, string $variant): static
     {
@@ -108,8 +109,8 @@ class Checkout implements Responsable
         }
 
         $this->custom = collect(array_replace_recursive($this->custom, $custom))
-            ->map(fn($value) => is_string($value) ? trim($value) : $value)
-            ->filter(fn($value) => ! is_null($value))
+            ->map(fn ($value) => is_string($value) ? trim($value) : $value)
+            ->filter(fn ($value) => ! is_null($value))
             ->toArray();
 
         return $this;
