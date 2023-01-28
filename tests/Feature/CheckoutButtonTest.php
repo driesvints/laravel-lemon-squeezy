@@ -69,7 +69,7 @@ it('can render a checkout instance', function () {
 
     $expect = <<<'HTML'
         <a
-            href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&custom%5Bbillable_id%5D=user_123&custom%5Bbillable_type%5D=users&embed=1"
+            href="https://lemon.lemonsqueezy.com/checkout/buy/variant_123?logo=0&checkout%5Bcustom%5D%5Bbillable_id%5D=user_123&checkout%5Bcustom%5D%5Bbillable_type%5D=users&embed=1"
             class="lemonsqueezy-button"
         >
             Buy Now

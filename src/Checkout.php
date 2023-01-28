@@ -20,7 +20,7 @@ class Checkout implements Responsable
 
     private array $fields = [];
 
-    private array $data = [];
+    private array $custom = [];
 
     public function __construct(string $variant)
     {
@@ -69,19 +69,19 @@ class Checkout implements Responsable
         return $this;
     }
 
-    public function withCustomData(array $data): static
+    public function withCustomData(array $custom): static
     {
         // These are reserved keys.
-        if (isset($this->data['billable_id'])) {
-            unset($data['billable_id']);
+        if (isset($this->custom['billable_id'])) {
+            unset($custom['billable_id']);
         }
 
-        if (isset($this->data['billable_type'])) {
-            unset($data['billable_type']);
+        if (isset($this->custom['billable_type'])) {
+            unset($custom['billable_type']);
         }
 
-        $this->data = $this->cleanQueryParameters(
-            array_replace_recursive($this->data, $data)
+        $this->custom = $this->cleanQueryParameters(
+            array_replace_recursive($this->custom, $custom)
         );
 
         return $this;
@@ -119,8 +119,8 @@ class Checkout implements Responsable
             $params = $params->merge($this->fields);
         }
 
-        if ($this->data) {
-            $params['custom'] = $this->data;
+        if ($this->custom) {
+            $params['checkout'] = ['custom' => $this->custom];
         }
 
         $params = $params->isNotEmpty() ? '?'.http_build_query($params->all()) : '';
