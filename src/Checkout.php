@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Redirect;
 
 class Checkout implements Responsable
 {
+    private string $store;
+
     private string $variant;
 
     private bool $logo = true;
@@ -22,14 +24,15 @@ class Checkout implements Responsable
 
     private array $custom = [];
 
-    public function __construct(string $variant)
+    public function __construct(string $store, string $variant)
     {
+        $this->store = $store;
         $this->variant = $variant;
     }
 
-    public static function make(string $variant): static
+    public static function make(string $store, string $variant): static
     {
-        return new static($variant);
+        return new static($store, $variant);
     }
 
     public function withoutLogo(): static
@@ -109,8 +112,6 @@ class Checkout implements Responsable
 
     public function url(): string
     {
-        $store = config('lemon-squeezy.store');
-
         $params = collect(['logo', 'media', 'description', 'code'])
             ->filter(fn ($toggle) => ! $this->{$toggle})
             ->mapWithKeys(fn ($toggle) => [$toggle => 0]);
@@ -125,7 +126,7 @@ class Checkout implements Responsable
 
         $params = $params->isNotEmpty() ? '?'.http_build_query($params->all()) : '';
 
-        return "https://{$store}.lemonsqueezy.com/checkout/buy/{$this->variant}".$params;
+        return "https://{$this->store}.lemonsqueezy.com/checkout/buy/{$this->variant}".$params;
     }
 
     public function redirect(): RedirectResponse

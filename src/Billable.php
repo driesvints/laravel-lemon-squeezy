@@ -2,11 +2,11 @@
 
 namespace LaravelLemonSqueezy;
 
+use LaravelLemonSqueezy\Concerns\ManagesCheckouts;
 use LaravelLemonSqueezy\Concerns\ManagesCustomer;
-use LaravelLemonSqueezy\Concerns\ManagesPayments;
 
 trait Billable
 {
     use ManagesCustomer;
-    use ManagesPayments;
+    use ManagesCheckouts;
 }

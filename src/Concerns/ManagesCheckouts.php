@@ -4,7 +4,7 @@ namespace LaravelLemonSqueezy\Concerns;
 
 use LaravelLemonSqueezy\Checkout;
 
-trait ManagesPayments
+trait ManagesCheckouts
 {
     /**
      * Create a new checkout instance to sell a product.
@@ -24,14 +24,14 @@ trait ManagesPayments
         ];
 
         // We'll need a way to identify the user in any webhook we're catching so before
-        // we make the API request we'll attach the authentication identifier to this
+        // we make an API request we'll attach the authentication identifier to this
         // checkout so we can match it back to a user when handling Lemon Squeezy webhooks.
         $data = [
             'billable_id' => $this->getKey(),
             'billable_type' => $this->getMorphClass(),
         ];
 
-        return Checkout::make($variant)
+        return Checkout::make(config('lemon-squeezy.store'), $variant)
             ->withPrefilledFields($fields)
             ->withCustomData($data);
     }
