@@ -63,11 +63,27 @@ class Checkout implements Responsable
         return $this;
     }
 
-    public function withPrefilledFields(array $fields): static
+    public function withName(string $name): static
     {
-        $this->fields = $this->cleanQueryParameters(
-            array_replace_recursive($this->fields, $fields)
-        );
+        $this->fields['name'] = $name;
+
+        return $this;
+    }
+
+    public function withEmail(string $email): static
+    {
+        $this->fields['email'] = $email;
+
+        return $this;
+    }
+
+    public function withBillingAddress(string $country, string $state = null, string $zip = null): static
+    {
+        $this->fields['billing_address'] = array_filter([
+            'country' => $country,
+            'state' => $state,
+            'zip' => $zip,
+        ]);
 
         return $this;
     }
@@ -75,6 +91,13 @@ class Checkout implements Responsable
     public function withDiscountCode(string $discountCode): static
     {
         $this->fields['discount_code'] = $discountCode;
+
+        return $this;
+    }
+
+    public function withTaxNumber(string $taxNumber): static
+    {
+        $this->fields['tax_number'] = $taxNumber;
 
         return $this;
     }
@@ -124,7 +147,7 @@ class Checkout implements Responsable
             ->mapWithKeys(fn ($toggle) => [$toggle => 0]);
 
         if ($this->fields) {
-            $params = $params->merge($this->fields);
+            $params = $params->merge(array_filter($this->fields));
         }
 
         if ($this->custom) {
