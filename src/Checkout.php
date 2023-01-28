@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Redirect;
 
 class Checkout implements Responsable
 {
-    private string $store;
-
-    private string $variant;
-
     private bool $logo = true;
 
     private bool $media = true;
@@ -24,11 +20,10 @@ class Checkout implements Responsable
 
     private array $custom = [];
 
-    public function __construct(string $store, string $variant)
-    {
-        $this->store = $store;
-        $this->variant = $variant;
-    }
+    public function __construct(
+        private string $store,
+        private string $variant
+    ) {}
 
     public static function make(string $store, string $variant): static
     {

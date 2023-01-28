@@ -20,7 +20,7 @@ trait ManagesCheckouts
             'billable_type' => $this->getMorphClass(),
         ];
 
-        return Checkout::make($this->getLemonSqueezyStore(), $variant)
+        return Checkout::make($this->lemonSqueezyStore(), $variant)
             ->withName($options['name'] ?? (string) $this->lemonSqueezyName())
             ->withEmail($options['email'] ?? (string) $this->lemonSqueezyEmail())
             ->withBillingAddress(
@@ -38,7 +38,7 @@ trait ManagesCheckouts
      *
      * @throws MissingStoreException
      */
-    public function getLemonSqueezyStore(): string
+    protected function lemonSqueezyStore(): string
     {
         if (! $store = config('lemon-squeezy.store')) {
             throw MissingStoreException::notConfigured();
