@@ -58,3 +58,11 @@ it('can include custom data', function () {
     expect($checkout->url())
         ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123?checkout%5Bcustom%5D%5Border_id%5D=789');
 });
+
+it('can set the discount code', function () {
+    $checkout = Checkout::make('lemon', 'variant_123')
+        ->withDiscountCode('10PERCENTOFF');
+
+    expect($checkout->url())
+        ->toBe('https://lemon.lemonsqueezy.com/checkout/buy/variant_123?discount_code=10PERCENTOFF');
+});

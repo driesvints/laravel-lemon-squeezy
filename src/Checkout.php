@@ -72,6 +72,13 @@ class Checkout implements Responsable
         return $this;
     }
 
+    public function withDiscountCode(string $discountCode): static
+    {
+        $this->fields['discount_code'] = $discountCode;
+
+        return $this;
+    }
+
     public function withCustomData(array $custom): static
     {
         // These are reserved keys.
