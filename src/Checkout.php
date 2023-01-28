@@ -84,16 +84,16 @@ class Checkout implements Responsable
         return $this;
     }
 
-    public function withDiscountCode(string $discountCode): static
+    public function withTaxNumber(string $taxNumber): static
     {
-        $this->fields['discount_code'] = $discountCode;
+        $this->fields['tax_number'] = $taxNumber;
 
         return $this;
     }
 
-    public function withTaxNumber(string $taxNumber): static
+    public function withDiscountCode(string $discountCode): static
     {
-        $this->fields['tax_number'] = $taxNumber;
+        $this->fields['discount_code'] = $discountCode;
 
         return $this;
     }
