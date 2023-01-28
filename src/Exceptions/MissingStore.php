@@ -4,7 +4,7 @@ namespace LaravelLemonSqueezy\Exceptions;
 
 use Exception;
 
-class MissingStoreException extends Exception
+class MissingStore extends Exception
 {
     public static function notConfigured(): static
     {

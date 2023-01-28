@@ -5,7 +5,7 @@ namespace LaravelLemonSqueezy;
 use Exception;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use LaravelLemonSqueezy\Exceptions\LemonSqueezyException;
+use LaravelLemonSqueezy\Exceptions\LemonSqueezyApiError;
 
 class LemonSqueezy
 {
@@ -41,7 +41,7 @@ class LemonSqueezy
             ->$method("https://api.lemonsqueezy.com/v1/{$uri}", $payload);
 
         if ($response->failed()) {
-            throw new LemonSqueezyException($response['errors'][0]['detail'], (int) $response['errors'][0]['status']);
+            throw new LemonSqueezyApiError($response['errors'][0]['detail'], (int) $response['errors'][0]['status']);
         }
 
         return $response;

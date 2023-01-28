@@ -4,7 +4,7 @@ namespace LaravelLemonSqueezy\Exceptions;
 
 use Exception;
 
-class LemonSqueezyException extends Exception
+class LemonSqueezyApiError extends Exception
 {
     //
 }

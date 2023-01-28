@@ -5,6 +5,7 @@ namespace LaravelLemonSqueezy;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use LaravelLemonSqueezy\Exceptions\ReservedCustomKeys;
 
 class Checkout implements Responsable
 {
@@ -99,40 +100,19 @@ class Checkout implements Responsable
 
     public function withCustomData(array $custom): static
     {
-        // These are reserved keys.
-        if (isset($this->custom['billable_id'])) {
-            unset($custom['billable_id']);
+        if (
+            (isset($custom['billable_id']) && isset($this->custom['billable_id'])) ||
+            (isset($custom['billable_type']) && isset($this->custom['billable_type']))
+        ) {
+            throw ReservedCustomKeys::overwriteAttempt();
         }
 
-        if (isset($this->custom['billable_type'])) {
-            unset($custom['billable_type']);
-        }
-
-        $this->custom = $this->cleanQueryParameters(
-            array_replace_recursive($this->custom, $custom)
-        );
+        $this->custom = collect(array_replace_recursive($this->custom, $custom))
+            ->map(fn($value) => is_string($value) ? trim($value) : $value)
+            ->filter(fn($value) => ! is_null($value))
+            ->toArray();
 
         return $this;
-    }
-
-    private function cleanQueryParameters(array $params): array
-    {
-        return collect($params)
-            ->map(function ($value) {
-                if (is_array($value)) {
-                    return collect($value)
-                        ->map(fn ($value) => is_string($value) ? trim($value) : $value)
-                        ->all();
-                }
-
-                return is_string($value) ? trim($value) : $value;
-            })->filter(function ($value) {
-                if (is_array($value)) {
-                    return collect($value)->filter()->all();
-                }
-
-                return ! empty($value);
-            })->all();
     }
 
     public function url(): string

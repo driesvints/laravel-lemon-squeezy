@@ -3,7 +3,7 @@
 namespace LaravelLemonSqueezy\Concerns;
 
 use LaravelLemonSqueezy\Checkout;
-use LaravelLemonSqueezy\Exceptions\MissingStoreException;
+use LaravelLemonSqueezy\Exceptions\MissingStore;
 
 trait ManagesCheckouts
 {
@@ -36,12 +36,12 @@ trait ManagesCheckouts
     /**
      * Get the configured Lemon Squeezy store subdomain from the config.
      *
-     * @throws MissingStoreException
+     * @throws MissingStore
      */
     protected function lemonSqueezyStore(): string
     {
         if (! $store = config('lemon-squeezy.store')) {
-            throw MissingStoreException::notConfigured();
+            throw MissingStore::notConfigured();
         }
 
         return $store;
