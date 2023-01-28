@@ -101,8 +101,8 @@ class Checkout implements Responsable
     public function withCustomData(array $custom): static
     {
         if (
-            (isset($custom['billable_id']) && isset($this->custom['billable_id'])) ||
-            (isset($custom['billable_type']) && isset($this->custom['billable_type']))
+            (array_key_exists('billable_id', $custom) && isset($this->custom['billable_id'])) ||
+            (array_key_exists('billable_type', $custom) && isset($this->custom['billable_type']))
         ) {
             throw ReservedCustomKeys::overwriteAttempt();
         }
