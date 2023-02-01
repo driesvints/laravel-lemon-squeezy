@@ -1,4 +1,4 @@
-# Laravel Lemon Squeezy
+# Lemon Squeezy for Laravel
 
 <a href="https://github.com/driesvints/laravel-lemon-squeezy/actions">
     <img src="https://github.com/driesvints/laravel-lemon-squeezy/actions/workflows/tests.yml/badge.svg" alt="Tests">
