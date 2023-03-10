@@ -16,8 +16,9 @@ class CreateSubscriptionsTable extends Migration
             $table->string('lemon_squeezy_id')->unique();
             $table->string('status');
             $table->integer('product_id');
-            $table->integer('quantity');
+            $table->integer('variant_id');
             $table->timestamp('trial_ends_at')->nullable();
+            $table->timestamp('renews_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
 

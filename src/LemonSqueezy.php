@@ -22,10 +22,20 @@ class LemonSqueezy
     public static bool $registersRoutes = true;
 
     /**
+     * The customer model class name.
+     */
+    public static string $customerModel = Customer::class;
+
+    /**
+     * The subscription model class name.
+     */
+    public static string $subscriptionModel = Subscription::class;
+
+    /**
      * Perform a Lemon Squeezy API call.
      *
-     * @throws \Exception
-     * @throws \LaravelLemonSqueezy\Exceptions\LemonSqueezyException
+     * @throws Exception
+     * @throws LemonSqueezyApiError
      */
     protected static function api(string $method, string $uri, array $payload = []): Response
     {
@@ -61,5 +71,21 @@ class LemonSqueezy
     public static function ignoreRoutes(): void
     {
         static::$registersRoutes = false;
+    }
+
+    /**
+     * Set the customer model class name.
+     */
+    public static function useCustomerModel(string $customerModel): void
+    {
+        static::$customerModel = $customerModel;
+    }
+
+    /**
+     * Set the subscription model class name.
+     */
+    public static function useSubscriptionModel(string $subscriptionModel): void
+    {
+        static::$subscriptionModel = $subscriptionModel;
     }
 }

@@ -8,17 +8,27 @@ use LaravelLemonSqueezy\Exceptions\MissingStore;
 trait ManagesCheckouts
 {
     /**
+     * Subscribe the customer to a new plan variant.
+     */
+    public function subscribe(string $variant, string $name = 'default', array $options = [], array $custom = []): Checkout
+    {
+        return $this->checkout($variant, $options, array_merge($custom, [
+            'subscription_name' => $name,
+        ]));
+    }
+
+    /**
      * Create a new checkout instance to sell a product.
      */
-    public function checkout(string $variant, array $options = []): Checkout
+    public function checkout(string $variant, array $options = [], array $custom = []): Checkout
     {
         // We'll need a way to identify the user in any webhook we're catching so before
         // we make an API request we'll attach the authentication identifier to this
         // checkout so we can match it back to a user when handling Lemon Squeezy webhooks.
-        $custom = [
+        $custom = array_merge($custom, [
             'billable_id' => $this->getKey(),
             'billable_type' => $this->getMorphClass(),
-        ];
+        ]);
 
         return Checkout::make($this->lemonSqueezyStore(), $variant)
             ->withName($options['name'] ?? (string) $this->lemonSqueezyName())

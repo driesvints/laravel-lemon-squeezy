@@ -4,7 +4,7 @@ namespace LaravelLemonSqueezy\Exceptions;
 
 use Exception;
 
-class InvalidPassthroughPayload extends Exception
+class InvalidCustomPayload extends Exception
 {
     //
 }
