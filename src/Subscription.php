@@ -11,11 +11,17 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Subscription extends Model
 {
     const STATUS_ON_TRIAL = 'on_trial';
+
     const STATUS_ACTIVE = 'active';
+
     const STATUS_PAUSED = 'paused';
+
     const STATUS_PAST_DUE = 'past_due';
+
     const STATUS_UNPAID = 'unpaid';
+
     const STATUS_CANCELLED = 'cancelled';
+
     const STATUS_EXPIRED = 'expired';
 
     /**

@@ -77,9 +77,9 @@ class WebhookController extends Controller
             'status' => $attributes['status'],
             'product_id' => $attributes['product_id'],
             'variant_id' => $attributes['variant_id'],
-            'trial_ends_at' =>  $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
-            'renews_at' =>  $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
-            'ends_at' =>  $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
+            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
+            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
+            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
         ]);
 
         SubscriptionCreated::dispatch($billable, $subscription, $payload);
