@@ -62,17 +62,17 @@ class WebhookController extends Controller
     {
         $custom = $payload['meta']['custom_data'] ?? null;
 
-        if (! isset($custom) || ! is_array($custom) || ! isset($custom['subscription_name'])) {
+        if (! isset($custom) || ! is_array($custom) || ! isset($custom['subscription_type'])) {
             throw new InvalidCustomPayload;
         }
-
-        $billable = $this->findOrCreateCustomer($custom);
 
         $data = $payload['data'];
         $attributes = $payload['data']['attributes'];
 
+        $billable = $this->findOrCreateCustomer($attributes['customer_id'], $custom);
+
         $subscription = $billable->subscriptions()->create([
-            'name' => $custom['subscription_name'],
+            'type' => $custom['subscription_type'],
             'lemon_squeezy_id' => $data['id'],
             'status' => $attributes['status'],
             'product_id' => $attributes['product_id'],
@@ -86,19 +86,21 @@ class WebhookController extends Controller
     }
 
     /**
-     * Find or create a customer based on the custom values and return the billable model.
+     * Find or create a customer based on the customer ID and return the billable model.
      *
      * @return \LaravelLemonSqueezy\Billable
      *
      * @throws InvalidCustomPayload
      */
-    protected function findOrCreateCustomer(array $custom)
+    protected function findOrCreateCustomer(int $customerId, array $custom)
     {
         if (! isset($custom['billable_id'], $custom['billable_type'])) {
             throw new InvalidCustomPayload;
         }
 
         return LemonSqueezy::$customerModel::firstOrCreate([
+            'lemon_squeezy_id' => $customerId,
+        ], [
             'billable_id' => $custom['billable_id'],
             'billable_type' => $custom['billable_type'],
         ])->billable;

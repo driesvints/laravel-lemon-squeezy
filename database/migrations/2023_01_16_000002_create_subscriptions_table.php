@@ -12,7 +12,7 @@ class CreateSubscriptionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('billable_id');
             $table->string('billable_type');
-            $table->string('name');
+            $table->string('type');
             $table->string('lemon_squeezy_id')->unique();
             $table->string('status');
             $table->integer('product_id');

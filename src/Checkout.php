@@ -104,7 +104,7 @@ class Checkout implements Responsable
         if (
             (array_key_exists('billable_id', $custom) && isset($this->custom['billable_id'])) ||
             (array_key_exists('billable_type', $custom) && isset($this->custom['billable_type'])) ||
-            (array_key_exists('subscription_name', $custom) && isset($this->custom['subscription_name']))
+            (array_key_exists('subscription_type', $custom) && isset($this->custom['subscription_type']))
         ) {
             throw ReservedCustomKeys::overwriteAttempt();
         }

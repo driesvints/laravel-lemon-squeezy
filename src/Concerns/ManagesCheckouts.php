@@ -10,10 +10,10 @@ trait ManagesCheckouts
     /**
      * Subscribe the customer to a new plan variant.
      */
-    public function subscribe(string $variant, string $name = 'default', array $options = [], array $custom = []): Checkout
+    public function subscribe(string $variant, string $type = 'default', array $options = [], array $custom = []): Checkout
     {
         return $this->checkout($variant, $options, array_merge($custom, [
-            'subscription_name' => $name,
+            'subscription_type' => $type,
         ]));
     }
 
