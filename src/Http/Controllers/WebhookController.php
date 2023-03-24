@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use LaravelLemonSqueezy\Events\SubscriptionCreated;
+use LaravelLemonSqueezy\Events\SubscriptionUpdated;
 use LaravelLemonSqueezy\Events\WebhookHandled;
 use LaravelLemonSqueezy\Events\WebhookReceived;
 use LaravelLemonSqueezy\Exceptions\InvalidCustomPayload;
 use LaravelLemonSqueezy\Http\Middleware\VerifyWebhookSignature;
 use LaravelLemonSqueezy\LemonSqueezy;
+use LaravelLemonSqueezy\Subscription;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
@@ -66,14 +68,13 @@ class WebhookController extends Controller
             throw new InvalidCustomPayload;
         }
 
-        $data = $payload['data'];
         $attributes = $payload['data']['attributes'];
 
         $billable = $this->findOrCreateCustomer($attributes['customer_id'], $custom);
 
         $subscription = $billable->subscriptions()->create([
             'type' => $custom['subscription_type'],
-            'lemon_squeezy_id' => $data['id'],
+            'lemon_squeezy_id' => $payload['data']['id'],
             'status' => $attributes['status'],
             'product_id' => $attributes['product_id'],
             'variant_id' => $attributes['variant_id'],
@@ -83,6 +84,32 @@ class WebhookController extends Controller
         ]);
 
         SubscriptionCreated::dispatch($billable, $subscription, $payload);
+    }
+
+    /**
+     * Handle subscription updated.
+     *
+     * @param  array  $payload
+     * @return void
+     */
+    protected function handleSubscriptionUpdated(array $payload)
+    {
+        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
+            return;
+        }
+
+        $attributes = $payload['data']['attributes'];
+
+        $subscription->update([
+            'status' => $attributes['status'],
+            'product_id' => $attributes['product_id'],
+            'variant_id' => $attributes['variant_id'],
+            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
+            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
+            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
+        ]);
+
+        SubscriptionUpdated::dispatch($subscription->billable, $subscription, $payload);
     }
 
     /**
@@ -104,5 +131,13 @@ class WebhookController extends Controller
             'billable_id' => $custom['billable_id'],
             'billable_type' => $custom['billable_type'],
         ])->billable;
+    }
+
+    /**
+     * Find the first subscription matching a Lemon Squeezy subscription id.
+     */
+    protected function findSubscription(string $subscriptionId): ?Subscription
+    {
+        return Cashier::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
     }
 }
