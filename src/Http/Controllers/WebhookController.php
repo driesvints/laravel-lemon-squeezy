@@ -56,8 +56,6 @@ class WebhookController extends Controller
     }
 
     /**
-     * Handle a subscription created webhook.
-     *
      * @throws InvalidCustomPayload
      */
     public function handleSubscriptionCreated(array $payload): void
@@ -78,6 +76,8 @@ class WebhookController extends Controller
             'status' => $attributes['status'],
             'product_id' => $attributes['product_id'],
             'variant_id' => $attributes['variant_id'],
+            'card_brand' => $attributes['card_brand'],
+            'card_last_four' => $attributes['card_last_four'],
             'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
             'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
             'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
@@ -86,12 +86,7 @@ class WebhookController extends Controller
         SubscriptionCreated::dispatch($billable, $subscription, $payload);
     }
 
-    /**
-     * Handle subscription updated.
-     *
-     * @return void
-     */
-    protected function handleSubscriptionUpdated(array $payload)
+    protected function handleSubscriptionUpdated(array $payload): void
     {
         if (! $subscription = $this->findSubscription($payload['data']['id'])) {
             return;
@@ -103,6 +98,8 @@ class WebhookController extends Controller
             'status' => $attributes['status'],
             'product_id' => $attributes['product_id'],
             'variant_id' => $attributes['variant_id'],
+            'card_brand' => $attributes['card_brand'],
+            'card_last_four' => $attributes['card_last_four'],
             'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
             'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
             'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
@@ -112,8 +109,6 @@ class WebhookController extends Controller
     }
 
     /**
-     * Find or create a customer based on the customer ID and return the billable model.
-     *
      * @return \LaravelLemonSqueezy\Billable
      *
      * @throws InvalidCustomPayload
@@ -132,9 +127,6 @@ class WebhookController extends Controller
         ])->billable;
     }
 
-    /**
-     * Find the first subscription matching a Lemon Squeezy subscription id.
-     */
     protected function findSubscription(string $subscriptionId): ?Subscription
     {
         return Cashier::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
