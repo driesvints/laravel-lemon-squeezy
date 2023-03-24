@@ -59,4 +59,9 @@ class Subscription extends Model
     {
         return $this->morphTo();
     }
+
+    public function onTrial(): bool
+    {
+        return $this->status === self::STATUS_ON_TRIAL;
+    }
 }

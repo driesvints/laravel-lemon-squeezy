@@ -6,7 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
+use LaravelLemonSqueezy\Events\SubscriptionCancelled;
 use LaravelLemonSqueezy\Events\SubscriptionCreated;
+use LaravelLemonSqueezy\Events\SubscriptionResumed;
 use LaravelLemonSqueezy\Events\SubscriptionUpdated;
 use LaravelLemonSqueezy\Events\WebhookHandled;
 use LaravelLemonSqueezy\Events\WebhookReceived;
@@ -108,6 +110,42 @@ class WebhookController extends Controller
         SubscriptionUpdated::dispatch($subscription->billable, $subscription, $payload);
     }
 
+    protected function handleSubscriptionCancelled(array $payload): void
+    {
+        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
+            return;
+        }
+
+        $attributes = $payload['data']['attributes'];
+
+        $subscription->update([
+            'status' => $attributes['status'],
+            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
+            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
+            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
+        ]);
+
+        SubscriptionCancelled::dispatch($subscription->billable, $subscription, $payload);
+    }
+
+    protected function handleSubscriptionResumed(array $payload): void
+    {
+        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
+            return;
+        }
+
+        $attributes = $payload['data']['attributes'];
+
+        $subscription->update([
+            'status' => $attributes['status'],
+            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
+            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
+            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
+        ]);
+
+        SubscriptionResumed::dispatch($subscription->billable, $subscription, $payload);
+    }
+
     /**
      * @return \LaravelLemonSqueezy\Billable
      *
@@ -129,6 +167,6 @@ class WebhookController extends Controller
 
     protected function findSubscription(string $subscriptionId): ?Subscription
     {
-        return Cashier::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
+        return LemonSqueezy::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
     }
 }
