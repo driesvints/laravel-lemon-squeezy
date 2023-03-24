@@ -89,7 +89,6 @@ class WebhookController extends Controller
     /**
      * Handle subscription updated.
      *
-     * @param  array  $payload
      * @return void
      */
     protected function handleSubscriptionUpdated(array $payload)
