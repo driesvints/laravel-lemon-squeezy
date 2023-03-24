@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use LaravelLemonSqueezy\Events\SubscriptionCancelled;
 use LaravelLemonSqueezy\Events\SubscriptionCreated;
+use LaravelLemonSqueezy\Events\SubscriptionExpired;
 use LaravelLemonSqueezy\Events\SubscriptionResumed;
 use LaravelLemonSqueezy\Events\SubscriptionUpdated;
 use LaravelLemonSqueezy\Events\WebhookHandled;
@@ -144,6 +145,24 @@ class WebhookController extends Controller
         ]);
 
         SubscriptionResumed::dispatch($subscription->billable, $subscription, $payload);
+    }
+
+    protected function handleSubscriptionExpired(array $payload): void
+    {
+        if (! $subscription = $this->findSubscription($payload['data']['id'])) {
+            return;
+        }
+
+        $attributes = $payload['data']['attributes'];
+
+        $subscription->update([
+            'status' => $attributes['status'],
+            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
+            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
+            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
+        ]);
+
+        SubscriptionExpired::dispatch($subscription->billable, $subscription, $payload);
     }
 
     /**
