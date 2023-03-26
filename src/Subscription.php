@@ -46,6 +46,7 @@ class Subscription extends Model
     protected $casts = [
         'product_id' => 'integer',
         'variant_id' => 'integer',
+        'pause_resumes_at' => 'datetime',
         'trial_ends_at' => 'datetime',
         'paused_from' => 'datetime',
         'renews_at' => 'datetime',
@@ -63,5 +64,35 @@ class Subscription extends Model
     public function onTrial(): bool
     {
         return $this->status === self::STATUS_ON_TRIAL;
+    }
+
+    public function active(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function paused(): bool
+    {
+        return $this->status === self::STATUS_PAUSED;
+    }
+
+    public function pastDue(): bool
+    {
+        return $this->status === self::STATUS_PAST_DUE;
+    }
+
+    public function unpaid(): bool
+    {
+        return $this->status === self::STATUS_UNPAID;
+    }
+
+    public function cancelled(): bool
+    {
+        return $this->status === self::STATUS_CANCELLED;
+    }
+
+    public function expired(): bool
+    {
+        return $this->status === self::STATUS_EXPIRED;
     }
 }

@@ -121,7 +121,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->updateSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
 
         SubscriptionCancelled::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -132,7 +132,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->updateSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
 
         SubscriptionResumed::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -143,7 +143,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->updateSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
 
         SubscriptionExpired::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -154,7 +154,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->updateSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
 
         SubscriptionPaused::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -165,7 +165,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->updateSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
 
         SubscriptionUnpaused::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -194,7 +194,7 @@ class WebhookController extends Controller
         return LemonSqueezy::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
     }
 
-    protected function updateSubscription(Subscription $subscription, array $attributes): Subscription
+    protected function syncSubscription(Subscription $subscription, array $attributes): Subscription
     {
         $subscription->update([
             'status' => $attributes['status'],
