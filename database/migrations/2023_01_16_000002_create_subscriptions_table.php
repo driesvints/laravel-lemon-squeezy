@@ -19,6 +19,8 @@ class CreateSubscriptionsTable extends Migration
             $table->integer('variant_id');
             $table->string('card_brand')->nullable();
             $table->string('card_last_four')->nullable();
+            $table->string('pause_mode')->nullable();
+            $table->timestamp('pause_resumes_at')->nullable();
             $table->timestamp('trial_ends_at')->nullable();
             $table->timestamp('renews_at')->nullable();
             $table->timestamp('ends_at')->nullable();
