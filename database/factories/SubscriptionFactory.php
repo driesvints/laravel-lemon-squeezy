@@ -4,7 +4,6 @@ namespace LaravelLemonSqueezy\Database\Factories;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use LaravelLemonSqueezy\LemonSqueezy;
 use LaravelLemonSqueezy\Subscription;
 
@@ -33,7 +32,7 @@ class SubscriptionFactory extends Factory
             'lemon_squeezy_id' => rand(1, 1000),
             'status' => Subscription::STATUS_ACTIVE,
             'product_id' => rand(1, 1000),
-            'variant_id' =>  rand(1, 1000),
+            'variant_id' => rand(1, 1000),
             'card_brand' => $this->faker->randomElement(['visa', 'mastercard', 'american_express', 'discover', 'jcb', 'diners_club']),
             'card_last_four' => rand(1000, 9999),
             'pause_mode' => null,
