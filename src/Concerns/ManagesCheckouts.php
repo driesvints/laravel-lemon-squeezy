@@ -8,16 +8,6 @@ use LaravelLemonSqueezy\Exceptions\MissingStore;
 trait ManagesCheckouts
 {
     /**
-     * Subscribe the customer to a new plan variant.
-     */
-    public function subscribe(string $variant, string $type = 'default', array $options = [], array $custom = []): Checkout
-    {
-        return $this->checkout($variant, $options, array_merge($custom, [
-            'subscription_type' => $type,
-        ]));
-    }
-
-    /**
      * Create a new checkout instance to sell a product.
      */
     public function checkout(string $variant, array $options = [], array $custom = []): Checkout
@@ -41,6 +31,16 @@ trait ManagesCheckouts
             ->withTaxNumber($options['tax_number'] ?? (string) $this->lemonSqueezyTaxNumber())
             ->withDiscountCode($options['discount_code'] ?? '')
             ->withCustomData($custom);
+    }
+
+    /**
+     * Subscribe the customer to a new plan variant.
+     */
+    public function subscribe(string $variant, string $type = 'default', array $options = [], array $custom = []): Checkout
+    {
+        return $this->checkout($variant, $options, array_merge($custom, [
+            'subscription_type' => $type,
+        ]));
     }
 
     /**

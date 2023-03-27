@@ -2,6 +2,7 @@
 
 namespace LaravelLemonSqueezy;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -59,6 +60,36 @@ class Subscription extends Model
     public function billable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function swap(int $productId, int $variantId): self
+    {
+        $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
+            'product_id' => $productId,
+            'variant_id' => $variantId,
+        ]);
+
+        $this->sync($response['data']['attributes']);
+
+        return $this;
+    }
+
+    public function sync(array $attributes): self
+    {
+        $this->update([
+            'status' => $attributes['status'],
+            'product_id' => $attributes['product_id'],
+            'variant_id' => $attributes['variant_id'],
+            'card_brand' => $attributes['card_brand'],
+            'card_last_four' => $attributes['card_last_four'],
+            'pause_mode' => $attributes['pause']['mode'] ?? null,
+            'pause_resumes_at' => isset($attributes['pause']['resumes_at']) ? Carbon::make($attributes['pause']['resumes_at']) : null,
+            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
+            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
+            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
+        ]);
+
+        return $this;
     }
 
     public function onTrial(): bool

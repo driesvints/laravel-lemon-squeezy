@@ -22,8 +22,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^7.0|^8.0",
-        "pestphp/pest": "^1.0",
-        "pestphp/pest-plugin-parallel": "^1.2"
+        "pestphp/pest": "^2.0"
     },
     "suggest": {
         "ext-intl": "Allows for more locales besides the default \"en\" when formatting money values."
@@ -31,7 +30,7 @@
     "autoload": {
         "psr-4": {
             "LaravelLemonSqueezy\\": "src/",
-            "LaravelLemonSqueezy\\Factories\\": "database/factories/"
+            "LaravelLemonSqueezy\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {

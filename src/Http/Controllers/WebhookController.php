@@ -97,20 +97,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $attributes = $payload['data']['attributes'];
-
-        $subscription->update([
-            'status' => $attributes['status'],
-            'product_id' => $attributes['product_id'],
-            'variant_id' => $attributes['variant_id'],
-            'card_brand' => $attributes['card_brand'],
-            'card_last_four' => $attributes['card_last_four'],
-            'pause_mode' => $attributes['pause']['mode'] ?? null,
-            'pause_resumes_at' => isset($attributes['pause']['resumes_at']) ? Carbon::make($attributes['pause']['resumes_at']) : null,
-            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
-            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
-            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
-        ]);
+        $subscription = $subscription->sync($payload['data']['attributes']);
 
         SubscriptionUpdated::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -121,7 +108,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $subscription->sync($payload['data']['attributes']);
 
         SubscriptionCancelled::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -132,7 +119,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $subscription->sync($payload['data']['attributes']);
 
         SubscriptionResumed::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -143,7 +130,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $subscription->sync($payload['data']['attributes']);
 
         SubscriptionExpired::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -154,7 +141,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $subscription->sync($payload['data']['attributes']);
 
         SubscriptionPaused::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -165,7 +152,7 @@ class WebhookController extends Controller
             return;
         }
 
-        $subscription = $this->syncSubscription($subscription, $payload['data']['attributes']);
+        $subscription = $subscription->sync($payload['data']['attributes']);
 
         SubscriptionUnpaused::dispatch($subscription->billable, $subscription, $payload);
     }
@@ -192,19 +179,5 @@ class WebhookController extends Controller
     protected function findSubscription(string $subscriptionId): ?Subscription
     {
         return LemonSqueezy::$subscriptionModel::firstWhere('lemon_squeezy_id', $subscriptionId);
-    }
-
-    protected function syncSubscription(Subscription $subscription, array $attributes): Subscription
-    {
-        $subscription->update([
-            'status' => $attributes['status'],
-            'pause_mode' => $attributes['pause']['mode'] ?? null,
-            'pause_resumes_at' => isset($attributes['pause']['resumes_at']) ? Carbon::make($attributes['pause']['resumes_at']) : null,
-            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
-            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
-            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
-        ]);
-
-        return $subscription;
     }
 }
