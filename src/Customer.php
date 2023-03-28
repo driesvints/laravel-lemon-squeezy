@@ -2,14 +2,18 @@
 
 namespace LaravelLemonSqueezy;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use LaravelLemonSqueezy\Database\Factories\CustomerFactory;
 
 /**
  * @property \LaravelLemonSqueezy\Billable $billable
  */
 class Customer extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -55,5 +59,15 @@ class Customer extends Model
     public function hasExpiredGenericTrial(): bool
     {
         return $this->trial_ends_at && $this->trial_ends_at->isPast();
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<static>
+     */
+    protected static function newFactory()
+    {
+        return CustomerFactory::new();
     }
 }

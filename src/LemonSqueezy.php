@@ -37,7 +37,7 @@ class LemonSqueezy
      * @throws Exception
      * @throws LemonSqueezyApiError
      */
-    protected static function api(string $method, string $uri, array $payload = []): Response
+    public static function api(string $method, string $uri, array $payload = []): Response
     {
         if (empty($apiKey = config('lemon-squeezy.api_key'))) {
             throw new Exception('Lemon Squeezy API key not set.');

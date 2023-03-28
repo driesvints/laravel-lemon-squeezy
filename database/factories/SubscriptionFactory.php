@@ -4,7 +4,7 @@ namespace LaravelLemonSqueezy\Database\Factories;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use LaravelLemonSqueezy\LemonSqueezy;
+use LaravelLemonSqueezy\Customer;
 use LaravelLemonSqueezy\Subscription;
 
 class SubscriptionFactory extends Factory
@@ -23,11 +23,9 @@ class SubscriptionFactory extends Factory
      */
     public function definition(): array
     {
-        $model = LemonSqueezy::$subscriptionModel;
-
         return [
-            'billable_id' => ($model)::factory(),
-            'billable_type' => $model,
+            'billable_id' => rand(1, 1000),
+            'billable_type' => 'App\\Models\\User',
             'type' => 'default',
             'lemon_squeezy_id' => rand(1, 1000),
             'status' => Subscription::STATUS_ACTIVE,
@@ -38,9 +36,23 @@ class SubscriptionFactory extends Factory
             'pause_mode' => null,
             'pause_resumes_at' => null,
             'trial_ends_at' => null,
-            'paused_from' => null,
+            'renews_at' => null,
             'ends_at' => null,
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function ($subscription) {
+            Customer::factory()->create([
+                'billable_id' => $subscription->billable_id,
+                'billable_type' => $subscription->billable_type,
+                'lemon_squeezy_id' => $subscription->lemon_squeezy_id,
+            ]);
+        });
     }
 
     /**

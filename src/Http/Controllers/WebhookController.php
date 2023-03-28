@@ -73,7 +73,7 @@ class WebhookController extends Controller
 
         $attributes = $payload['data']['attributes'];
 
-        $billable = $this->findOrCreateCustomer($attributes['customer_id'], $custom);
+        $billable = $this->findOrCreateCustomer((string) $attributes['customer_id'], $custom);
 
         $subscription = $billable->subscriptions()->create([
             'type' => $custom['subscription_type'],
@@ -81,8 +81,8 @@ class WebhookController extends Controller
             'status' => $attributes['status'],
             'product_id' => $attributes['product_id'],
             'variant_id' => $attributes['variant_id'],
-            'card_brand' => $attributes['card_brand'],
-            'card_last_four' => $attributes['card_last_four'],
+            'card_brand' => $attributes['card_brand'] ?? null,
+            'card_last_four' => $attributes['card_last_four'] ?? null,
             'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
             'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
             'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
@@ -162,7 +162,7 @@ class WebhookController extends Controller
      *
      * @throws InvalidCustomPayload
      */
-    protected function findOrCreateCustomer(int $customerId, array $custom)
+    protected function findOrCreateCustomer(string $customerId, array $custom)
     {
         if (! isset($custom['billable_id'], $custom['billable_type'])) {
             throw new InvalidCustomPayload;

@@ -15,8 +15,8 @@ class CreateSubscriptionsTable extends Migration
             $table->string('type');
             $table->string('lemon_squeezy_id')->unique();
             $table->string('status');
-            $table->integer('product_id');
-            $table->integer('variant_id');
+            $table->string('product_id');
+            $table->string('variant_id');
             $table->string('card_brand')->nullable();
             $table->string('card_last_four')->nullable();
             $table->string('pause_mode')->nullable();

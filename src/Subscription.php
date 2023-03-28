@@ -3,6 +3,8 @@
 namespace LaravelLemonSqueezy;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use LaravelLemonSqueezy\Database\Factories\SubscriptionFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -11,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Subscription extends Model
 {
+    use HasFactory;
+
     const STATUS_ON_TRIAL = 'on_trial';
 
     const STATUS_ACTIVE = 'active';
@@ -45,8 +49,6 @@ class Subscription extends Model
      * @var array
      */
     protected $casts = [
-        'product_id' => 'integer',
-        'variant_id' => 'integer',
         'pause_resumes_at' => 'datetime',
         'trial_ends_at' => 'datetime',
         'paused_from' => 'datetime',
@@ -62,11 +64,17 @@ class Subscription extends Model
         return $this->morphTo();
     }
 
-    public function swap(int $productId, int $variantId): self
+    public function swap(string $productId, string $variantId): self
     {
         $response = LemonSqueezy::api('PATCH', "subscriptions/{$this->lemon_squeezy_id}", [
-            'product_id' => $productId,
-            'variant_id' => $variantId,
+            'data' => [
+                'type' => 'subscriptions',
+                'id' => $this->lemon_squeezy_id,
+                'attributes' => [
+                    'product_id' => $productId,
+                    'variant_id' => $variantId,
+                ],
+            ],
         ]);
 
         $this->sync($response['data']['attributes']);
@@ -80,13 +88,13 @@ class Subscription extends Model
             'status' => $attributes['status'],
             'product_id' => $attributes['product_id'],
             'variant_id' => $attributes['variant_id'],
-            'card_brand' => $attributes['card_brand'],
-            'card_last_four' => $attributes['card_last_four'],
+            'card_brand' => $attributes['card_brand'] ?? null,
+            'card_last_four' => $attributes['card_last_four'] ?? null,
             'pause_mode' => $attributes['pause']['mode'] ?? null,
             'pause_resumes_at' => isset($attributes['pause']['resumes_at']) ? Carbon::make($attributes['pause']['resumes_at']) : null,
-            'trial_ends_at' => $attributes['trial_ends_at'] ? Carbon::make($attributes['trial_ends_at']) : null,
-            'renews_at' => $attributes['renews_at'] ? Carbon::make($attributes['renews_at']) : null,
-            'ends_at' => $attributes['ends_at'] ? Carbon::make($attributes['ends_at']) : null,
+            'trial_ends_at' => isset($attributes['trial_ends_at']) ? Carbon::make($attributes['trial_ends_at']) : null,
+            'renews_at' => isset($attributes['renews_at']) ? Carbon::make($attributes['renews_at']) : null,
+            'ends_at' => isset($attributes['ends_at']) ? Carbon::make($attributes['ends_at']) : null,
         ]);
 
         return $this;
@@ -125,5 +133,15 @@ class Subscription extends Model
     public function expired(): bool
     {
         return $this->status === self::STATUS_EXPIRED;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<static>
+     */
+    protected static function newFactory()
+    {
+        return SubscriptionFactory::new();
     }
 }
