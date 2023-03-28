@@ -4,9 +4,9 @@ namespace LaravelLemonSqueezy;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use LaravelLemonSqueezy\Database\Factories\SubscriptionFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use LaravelLemonSqueezy\Database\Factories\SubscriptionFactory;
 
 /**
  * @property \LaravelLemonSqueezy\Billable $billable

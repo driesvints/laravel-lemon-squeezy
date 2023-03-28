@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use LaravelLemonSqueezy\Subscription;
 use Illuminate\Support\Facades\Http;
+use LaravelLemonSqueezy\Subscription;
 
 uses(RefreshDatabase::class);
 
