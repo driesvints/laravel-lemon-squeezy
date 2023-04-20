@@ -1,3 +1,5 @@
+👋 **This package has moved to [https://github.com/lmsqueezy/laravel](https://github.com/lmsqueezy/laravel)**
+
 # Lemon Squeezy for Laravel
 
 <a href="https://github.com/driesvints/laravel-lemon-squeezy/actions">
@@ -16,5 +18,3 @@
 A package to easily integrate your Laravel application with [Lemon Squeezy](https://www.lemonsqueezy.com/)'s billing services.
 
 This package drew inspiration from [Cashier](https://github.com/laravel/cashier-stripe) which was created by [Taylor Otwell](https://twitter.com/taylorotwell).
-
-> This package is a work in progress...
